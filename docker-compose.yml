@@ -1,0 +1,11 @@
+services:
+  hoymetrics:
+    build: .
+    environment:
+      DTU_IP: "192.168.0.100"
+      FETCH_MODE: "daemon"
+      FETCH_INTERVAL: "60"
+      PROMETHEUS_PORT: "9100"
+    ports:
+      - "9100:9100"
+    restart: unless-stopped

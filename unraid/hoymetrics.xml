@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>hoymetrics</Name>
+  <Repository>ghcr.io/mplx/hoymetrics:latest</Repository>
+  <Registry>https://ghcr.io</Registry>
+  <Network>bridge</Network>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/mplx/hoymetrics/issues</Support>
+  <Project>https://github.com/mplx/hoymetrics</Project>
+  <Overview>Polls a Hoymiles solar inverter DTU over the local network and exposes data as Prometheus metrics and/or logs it to CSV. Supports single fetch, periodic, and daemon (Prometheus exporter) modes.</Overview>
+  <Category>Tools:Utilities</Category>
+  <WebUI>http://[IP]:[PORT:9100]/metrics</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/mplx/hoymetrics/main/unraid/hoymetrics.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/mplx/hoymetrics/main/unraid/icon.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+
+  <Config
+    Name="DTU IP"
+    Target="DTU_IP"
+    Default=""
+    Mode=""
+    Description="IP address of the Hoymiles DTU on your local network. Required."
+    Type="Variable"
+    Display="always"
+    Required="true"
+    Mask="false"/>
+
+  <Config
+    Name="Fetch Mode"
+    Target="FETCH_MODE"
+    Default="daemon"
+    Mode=""
+    Description="daemon = long-running Prometheus exporter. Leave empty for single fetch."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false"/>
+
+  <Config
+    Name="Fetch Interval"
+    Target="FETCH_INTERVAL"
+    Default="60"
+    Mode=""
+    Description="Seconds between polls. Minimum 10. Values below 35 enable performance data mode on the DTU."
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false"/>
+
+  <Config
+    Name="Prometheus Port"
+    Target="PROMETHEUS_PORT"
+    Default="9100"
+    Mode=""
+    Description="HTTP port for the /metrics endpoint (daemon mode only)."
+    Type="Variable"
+    Display="advanced"
+    Required="false"
+    Mask="false"/>
+
+  <Config
+    Name="Log File"
+    Target="LOG_FILE"
+    Default=""
+    Mode=""
+    Description="Full path inside the container to write CSV logs. Leave empty to disable CSV logging. Example: /data/hoymiles_log.csv"
+    Type="Variable"
+    Display="always"
+    Required="false"
+    Mask="false"/>
+
+  <Config
+    Name="Metrics Port"
+    Target="9100"
+    Default="9100"
+    Mode="tcp"
+    Description="Prometheus /metrics endpoint."
+    Type="Port"
+    Display="always"
+    Required="false"
+    Mask="false"/>
+
+  <Config
+    Name="Data"
+    Target="/data"
+    Default="/mnt/user/appdata/hoymetrics"
+    Mode="rw"
+    Description="Host path for CSV log storage. Only needed when LOG_FILE is set."
+    Type="Path"
+    Display="always"
+    Required="false"
+    Mask="false"/>
+</Container>
