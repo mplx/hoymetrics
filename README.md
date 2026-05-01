@@ -17,7 +17,7 @@ All configuration is via environment variables:
 | `FETCH_MODE` | _(unset)_ | Set to `daemon` to enable Prometheus exporter mode |
 | `FETCH_INTERVAL` | `60` | Seconds between polls; minimum 10. Unset or `0` = single fetch |
 | `LOG_FILE` | _(unset)_ | CSV log file path; if unset, no file is written |
-| `PROMETHEUS_PORT` | `9100` | HTTP port for `/metrics` (daemon mode only) |
+| `PROMETHEUS_PORT` | `9100` | HTTP port for `/metrics` (daemon mode only); on Unraid, use the port mapping instead |
 
 ## Running
 
@@ -67,6 +67,8 @@ A sample dashboard is provided at `grafana/hoymetrics.json`. Import it via "Dash
 ### Unraid
 
 Install via Community Applications by adding `https://github.com/mplx/hoymetrics` as a template repository, then search for "hoymetrics".
+
+The Unraid template does not expose `PROMETHEUS_PORT` — the container always listens on port `9100` internally. Use the **Metrics Port** field in the template to choose which host port to map it to.
 
 ## Prometheus metrics
 

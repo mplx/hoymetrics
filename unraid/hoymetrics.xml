@@ -49,17 +49,6 @@
     Mask="false"/>
 
   <Config
-    Name="Prometheus Port"
-    Target="PROMETHEUS_PORT"
-    Default="9100"
-    Mode=""
-    Description="Port the container listens on for /metrics (daemon mode only). Must match the Metrics Port mapping below."
-    Type="Variable"
-    Display="advanced"
-    Required="false"
-    Mask="false"/>
-
-  <Config
     Name="Log File"
     Target="LOG_FILE"
     Default=""
@@ -75,7 +64,7 @@
     Target="9100"
     Default="9100"
     Mode="tcp"
-    Description="Host port for the Prometheus /metrics endpoint. Must match the Prometheus Port variable above."
+    Description="Host port mapped to the Prometheus /metrics endpoint."
     Type="Port"
     Display="always"
     Required="false"
