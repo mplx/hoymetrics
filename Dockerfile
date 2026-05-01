@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-RUN pip install --no-cache-dir hoymiles-wifi supervisor
+RUN pip install --no-cache-dir hoymiles-wifi prometheus_client supervisor
 
 WORKDIR /app
 COPY hoymetrics/ hoymetrics/
