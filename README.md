@@ -11,13 +11,13 @@ Polls a Hoymiles solar inverter DTU over the local network and logs output to CS
 
 All configuration is via environment variables:
 
-| Variable | Default | Description |
-|---|---|---|
-| `DTU_IP` | _(required)_ | IP address of the Hoymiles DTU |
-| `FETCH_MODE` | _(unset)_ | Set to `daemon` to enable Prometheus exporter mode |
-| `FETCH_INTERVAL` | `60` | Seconds between polls; minimum 10. Unset or `0` = single fetch |
-| `LOG_FILE` | _(unset)_ | CSV log file path; if unset, no file is written |
-| `PROMETHEUS_PORT` | `9100` | HTTP port for `/metrics` (daemon mode only); on Unraid, use the port mapping instead |
+| Variable          | Default      | Description                                                                          |
+|-------------------|--------------|--------------------------------------------------------------------------------------|
+| `DTU_IP`          | _(required)_ | IP address of the Hoymiles DTU                                                       |
+| `FETCH_MODE`      | _(unset)_    | Set to `daemon` to enable Prometheus exporter mode                                   |
+| `FETCH_INTERVAL`  | `60`         | Seconds between polls; minimum 10. Unset or `0` = single fetch                       |
+| `LOG_FILE`        | _(unset)_    | CSV log file path; if unset, no file is written                                      |
+| `PROMETHEUS_PORT` | `9100`       | HTTP port for `/metrics` (daemon mode only); on Unraid, use the port mapping instead |
 
 ## Running
 
@@ -66,24 +66,30 @@ A sample dashboard is provided at `grafana/hoymetrics.json`. Import it via "Dash
 
 ### Unraid
 
-Install via Community Applications by adding `https://github.com/mplx/hoymetrics` as a template repository, then search for "hoymetrics".
+Add the template manually from console:
+
+```bash
+wget -O /boot/config/plugins/dockerMan/templates-user/my-hoymetrics.xml https://raw.githubusercontent.com/mplx/hoymetrics/refs/heads/main/unraid/hoymetrics.xml
+```
+
+Then add a Docker container and select the "hoymetrics" template.
 
 The Unraid template does not expose `PROMETHEUS_PORT` — the container always listens on port `9100` internally. Use the **Metrics Port** field in the template to choose which host port to map it to.
 
 ## Prometheus metrics
 
-| Metric | Description |
-|---|---|
-| `hoymetrics_power_watts` | Total PV output in watts |
-| `hoymetrics_today_energy_kwh` | Total energy production today in kWh |
-| `hoymetrics_total_energy_kwh` | Lifetime total energy production in kWh |
-| `hoymetrics_port_power_watts{serial="…", port="N"}` | Per-port power in watts |
-| `hoymetrics_port_voltage_volts{serial="…", port="N"}` | Per-port voltage in volts |
-| `hoymetrics_port_current_amps{serial="…", port="N"}` | Per-port current in amps |
-| `hoymetrics_port_today_energy_kwh{serial="…", port="N"}` | Per-port energy today in kWh |
-| `hoymetrics_port_total_energy_kwh{serial="…", port="N"}` | Per-port lifetime energy in kWh |
-| `hoymetrics_last_fetch_timestamp` | Unix timestamp of last fetch attempt |
-| `hoymetrics_fetch_errors_total` | Counter of failed fetches (exceptions only; inverter offline is not counted) |
+| Metric                                                   | Description                                                                  |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `hoymetrics_power_watts`                                 | Total PV output in watts                                                     |
+| `hoymetrics_today_energy_kwh`                            | Total energy production today in kWh                                         |
+| `hoymetrics_total_energy_kwh`                            | Lifetime total energy production in kWh                                      |
+| `hoymetrics_port_power_watts{serial="…", port="N"}`      | Per-port power in watts                                                      |
+| `hoymetrics_port_voltage_volts{serial="…", port="N"}`    | Per-port voltage in volts                                                    |
+| `hoymetrics_port_current_amps{serial="…", port="N"}`     | Per-port current in amps                                                     |
+| `hoymetrics_port_today_energy_kwh{serial="…", port="N"}` | Per-port energy today in kWh                                                 |
+| `hoymetrics_port_total_energy_kwh{serial="…", port="N"}` | Per-port lifetime energy in kWh                                              |
+| `hoymetrics_last_fetch_timestamp`                        | Unix timestamp of last fetch attempt                                         |
+| `hoymetrics_fetch_errors_total`                          | Counter of failed fetches (exceptions only; inverter offline is not counted) |
 
 ## CSV output
 
