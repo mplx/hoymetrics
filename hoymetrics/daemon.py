@@ -40,17 +40,17 @@ def poll_loop():
         try:
             data = asyncio.run(fetch(DTU_IP, FETCH_INTERVAL))
             if data:
-                power_w.set(data.dtu_power)
-                today_kwh.set(data.dtu_daily_energy)
-                total_kwh.set(sum(pv.energy_total for pv in data.pv_data))
+                power_w.set(data.dtu_power / 10)
+                today_kwh.set(data.dtu_daily_energy / 1000)
+                total_kwh.set(sum(pv.energy_total for pv in data.pv_data) / 1000)
                 for pv in data.pv_data:
                     labels = {"serial": hex(pv.serial_number)[2:], "port": str(pv.port_number)}
                     _known_port_labels.add((labels["serial"], labels["port"]))
-                    port_power_w.labels(**labels).set(pv.power)
-                    port_voltage_v.labels(**labels).set(pv.voltage)
-                    port_current_a.labels(**labels).set(pv.current)
-                    port_today_kwh.labels(**labels).set(pv.energy_daily)
-                    port_total_kwh.labels(**labels).set(pv.energy_total)
+                    port_power_w.labels(**labels).set(pv.power / 10)
+                    port_voltage_v.labels(**labels).set(pv.voltage / 10)
+                    port_current_a.labels(**labels).set(pv.current / 100)
+                    port_today_kwh.labels(**labels).set(pv.energy_daily / 1000)
+                    port_total_kwh.labels(**labels).set(pv.energy_total / 1000)
                 last_fetch_ts.set(time.time())
                 if LOG_FILE:
                     log_to_csv(LOG_FILE, data)

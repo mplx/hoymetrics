@@ -38,17 +38,17 @@ def log_to_csv(log_file, data):
 
     row = {
         "timestamp": datetime.now().isoformat(),
-        "power_w": data.dtu_power,
-        "today_kwh": data.dtu_daily_energy,
-        "total_kwh": sum(pv.energy_total for pv in data.pv_data),
+        "power_w": data.dtu_power / 10,
+        "today_kwh": data.dtu_daily_energy / 1000,
+        "total_kwh": sum(pv.energy_total for pv in data.pv_data) / 1000,
     }
     for pv in data.pv_data:
         s, n = _pv_serial(pv), pv.port_number
-        row[f"{s}_port{n}_w"] = pv.power
-        row[f"{s}_port{n}_v"] = pv.voltage
-        row[f"{s}_port{n}_a"] = pv.current
-        row[f"{s}_port{n}_kwh_today"] = pv.energy_daily
-        row[f"{s}_port{n}_kwh_total"] = pv.energy_total
+        row[f"{s}_port{n}_w"] = pv.power / 10
+        row[f"{s}_port{n}_v"] = pv.voltage / 10
+        row[f"{s}_port{n}_a"] = pv.current / 100
+        row[f"{s}_port{n}_kwh_today"] = pv.energy_daily / 1000
+        row[f"{s}_port{n}_kwh_total"] = pv.energy_total / 1000
 
     with open(log_file, "a", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=base_fields + port_fields)

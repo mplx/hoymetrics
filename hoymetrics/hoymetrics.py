@@ -14,7 +14,7 @@ async def main():
     if data:
         if LOG_FILE:
             log_to_csv(LOG_FILE, data)
-        print(f"{data.dtu_power}W, today {data.dtu_daily_energy}kWh")
+        print(f"{data.dtu_power / 10:.1f}W, today {data.dtu_daily_energy / 1000:.3f}kWh")
     else:
         print("No response from inverter")
 

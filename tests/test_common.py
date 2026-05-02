@@ -149,8 +149,8 @@ def test_log_to_csv_writes_base_values(tmp_path):
     log_to_csv(str(log_file), _make_data(dtu_power=200, dtu_daily_energy=2500))
     with open(log_file) as f:
         row = next(csv.DictReader(f))
-    assert row["power_w"] == "200"
-    assert row["today_kwh"] == "2500"
+    assert row["power_w"] == "20.0"       # 200 dW / 10 = 20.0 W
+    assert row["today_kwh"] == "2.5"      # 2500 Wh / 1000 = 2.5 kWh
 
 
 def test_log_to_csv_writes_per_port_values(tmp_path):
@@ -162,13 +162,13 @@ def test_log_to_csv_writes_per_port_values(tmp_path):
     log_to_csv(str(log_file), _make_data(pv_data=pv_data))
     with open(log_file) as f:
         row = next(csv.DictReader(f))
-    assert row[f"{SERIAL_A_HEX}_port1_w"] == "120"
-    assert row[f"{SERIAL_A_HEX}_port1_v"] == "235"
-    assert row[f"{SERIAL_A_HEX}_port1_a"] == "6"
-    assert row[f"{SERIAL_A_HEX}_port1_kwh_today"] == "800"
-    assert row[f"{SERIAL_A_HEX}_port1_kwh_total"] == "4000"
-    assert row[f"{SERIAL_A_HEX}_port2_w"] == "80"
-    assert row[f"{SERIAL_A_HEX}_port2_v"] == "233"
+    assert row[f"{SERIAL_A_HEX}_port1_w"] == "12.0"      # 120 dW / 10
+    assert row[f"{SERIAL_A_HEX}_port1_v"] == "23.5"      # 235 dV / 10
+    assert row[f"{SERIAL_A_HEX}_port1_a"] == "0.06"      # 6 cA / 100
+    assert row[f"{SERIAL_A_HEX}_port1_kwh_today"] == "0.8"   # 800 Wh / 1000
+    assert row[f"{SERIAL_A_HEX}_port1_kwh_total"] == "4.0"   # 4000 Wh / 1000
+    assert row[f"{SERIAL_A_HEX}_port2_w"] == "8.0"       # 80 dW / 10
+    assert row[f"{SERIAL_A_HEX}_port2_v"] == "23.3"      # 233 dV / 10
 
 
 def test_log_to_csv_two_inverters_separate_columns(tmp_path):
@@ -180,8 +180,8 @@ def test_log_to_csv_two_inverters_separate_columns(tmp_path):
     log_to_csv(str(log_file), _make_data(pv_data=pv_data))
     with open(log_file) as f:
         row = next(csv.DictReader(f))
-    assert row[f"{SERIAL_A_HEX}_port1_w"] == "100"
-    assert row[f"{SERIAL_B_HEX}_port1_w"] == "80"
+    assert row[f"{SERIAL_A_HEX}_port1_w"] == "10.0"
+    assert row[f"{SERIAL_B_HEX}_port1_w"] == "8.0"
 
 
 def test_log_to_csv_total_kwh_is_sum_of_ports(tmp_path):
@@ -190,7 +190,7 @@ def test_log_to_csv_total_kwh_is_sum_of_ports(tmp_path):
     log_to_csv(str(log_file), _make_data(pv_data=pv_data))
     with open(log_file) as f:
         row = next(csv.DictReader(f))
-    assert row["total_kwh"] == "5000"
+    assert row["total_kwh"] == "5.0"      # (3000+2000) Wh / 1000
 
 
 def test_log_to_csv_appends_rows(tmp_path):
@@ -216,5 +216,5 @@ def test_log_to_csv_empty_pv_data(tmp_path):
     log_to_csv(str(log_file), _make_data(pv_data=[]))
     with open(log_file) as f:
         row = next(csv.DictReader(f))
-    assert row["power_w"] == "150"
-    assert row["total_kwh"] == "0"
+    assert row["power_w"] == "15.0"   # 150 dW / 10
+    assert row["total_kwh"] == "0.0"  # 0 Wh / 1000
